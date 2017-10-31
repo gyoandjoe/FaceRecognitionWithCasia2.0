@@ -1,0 +1,13 @@
+cambio 1 exp 6
+
+Cambio de batch size de 400 a 200, a apartide de la epoca 55 experiment 6
+cambio de 200 a 450
+--Registros eliminados se detecto un drecremento importante
+
+Cambio 2 exp 6
+Cambio de  pDropOut=0.5 a  pDropOut=0.3 
+
+
+Cambio 3 exp 6
+Cambio de  pDropOut=0.5 a  pDropOut=0.8 
+
