@@ -18,11 +18,6 @@ class SoftMaxLayer(object):
 
         self.LayerName = 'SoftMaxLayer_' + layer_name
 
-
-
-
-
-
         self.p_y_given_x = T.nnet.softmax(input_image)
 
         self.y_pred = T.argmax(self.p_y_given_x, axis=1)
@@ -51,7 +46,7 @@ class SoftMaxLayer(object):
     def cost_function(self, true_y):
         return T.mean((T.nnet.categorical_crossentropy(self.p_y_given_x, true_y)))
 
-    def errors(self, y):
+    def error_function(self, y):
         """
         Regresa el promedio de errores, el resultado esta en el rango DE 0 a 1 donde 0 significa que no hubo error y 1 significa que en todos hubo error
         :param y:
@@ -60,3 +55,6 @@ class SoftMaxLayer(object):
         result = T.neq(self.y_pred, y)  # the T.neq operator returns a vector of 0s and 1s, where 1 represents a mistake in prediction
 
         return T.mean(result)
+
+    def predictor_function(self):
+        return self.y_pred

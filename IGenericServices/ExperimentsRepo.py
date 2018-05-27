@@ -30,6 +30,12 @@ class ExperimentsRepo(object):
             return None
         return self.experiment[3]
 
+    def ObtenerPKLsValidationReferenceFile(self):
+        if self.experiment is None:
+            return None
+        return self.experiment[15]
+
+
     def ObtenerStatus(self):
         if self.experiment is None:
             return None
@@ -57,6 +63,29 @@ class ExperimentsRepo(object):
             listPKLs.append(itemDict)
         return listPKLs
 
+    def ObtenerPKLTestRerferenceList(self):
+        referenceFullPath = self.ObtenerPKLsTestReferenceFile()
+        listPKLs = []
+        referenceList = pd.read_csv(referenceFullPath)
+        for index, row in referenceList.iterrows():
+            itemDict = {
+                "pklFullPath": row["full_path_pkl"],
+                "pklNoRpws": row["size_pkl"]
+            }
+            listPKLs.append(itemDict)
+        return listPKLs
+
+    def ObtenerPKLValidationReferenceList(self):
+        referenceFullPath = self.ObtenerPKLsValidationReferenceFile()
+        listPKLs = []
+        referenceList = pd.read_csv(referenceFullPath)
+        for index, row in referenceList.iterrows():
+            itemDict = {
+                "pklFullPath": row["full_path_pkl"],
+                "pklNoRpws": row["size_pkl"]
+            }
+            listPKLs.append(itemDict)
+        return listPKLs
 
     def ObtenerMaxEpoch(self):
         if self.experiment is None:

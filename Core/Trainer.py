@@ -13,7 +13,7 @@ class Trainer(object):
                  logger,
                  cnn,
                  experimentsManager,
-                 weightsRepo):
+                 weightsRepo,norows_trainset=690569):
         """
         :param logger: ILoggerService
         :param cnn: Arquitecture implementation
@@ -39,7 +39,8 @@ class Trainer(object):
             list_PKL_files=self.experiment.pkl_train_referenceList,
             batch_size=self.experiment.batch_size,
             superbatch_Size=self.experiment.super_batch_size,
-            no_rows=690569 )
+            no_rows=norows_trainset
+        )
         self.data_set_manager = DataSetManager(self.experiment.batch_size,self.experiment.super_batch_size,self.data_set_repo)
 
         self.saveWeigthsFrecuency = self.experiment.saveWeigthsFrecuency

@@ -4,12 +4,14 @@ weightsMetadata={
 
 experimentMetaData={
     "initialLearningRate": 0.1,
-    "PKLsTrainReferenceFile": 'D:\\Gyo\\Dev\\Thesis\\FaceRecognition2.0_metadata\\reference_fr2.0.csv',
-    "PKLsTestReferenceFile": '',
+    "PKLsTrainReferenceFile": 'D:\\Gyo\\Dev\\Thesis\\dist2\\referenceTrainfull\\pkls_train.csv',
+    "PKLsTestReferenceFile": 'D:\\Gyo\\Dev\\Thesis\\dist2\\referencetest\\pkls_test.csv',
+    "PKLsValReferenceFile": 'D:\\Gyo\\Dev\\Thesis\\dist2\\referencetest\\pkls_valid.csv',
     "status": 'inicializado',
     "batchSize": 400,
     "superBatchSize": 36000,
-    "maxEpochTraining": 100,
+    "noRowsTrainSet":690838,
+    "maxEpochTraining": 60,
     "epochFrecSaveWeights": 1,
     "withLRDecay":0,
     "EpochFrecLRDecay":5,
@@ -88,7 +90,7 @@ distributionNormalDistParams = {
     "conv8InitSD":0.1,
 
     "conv9InitMean":0,
-    "conv9InitSD":0.1,
+    "conv9InitSD":0.01,
 
     "conv10InitMean":0,
     "conv10InitSD":0.01,

@@ -16,6 +16,7 @@ class ExperimentInitializer(object):
             initialLearningRate=experiment_metadata["initialLearningRate"],
             PKLsTrainReferenceFile=experiment_metadata["PKLsTrainReferenceFile"],
             PKLsTestReferenceFile=experiment_metadata["PKLsTestReferenceFile"],
+            PKLsValReferenceFile=experiment_metadata["PKLsValReferenceFile"],
             status=experiment_metadata["status"],
             batchSize=experiment_metadata["batchSize"],
             superBatchSize=experiment_metadata["superBatchSize"],

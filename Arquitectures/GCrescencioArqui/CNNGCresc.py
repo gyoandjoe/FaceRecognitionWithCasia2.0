@@ -269,6 +269,11 @@ class CNNGCresc(object):
 
         self.CostFunction = self.SoftMax_1.negative_log_likelihood(self.y)
 
+        self.ErrorFunction = self.SoftMax_1.error_function(self.y)
+
+        self.PredictorFunction = self.SoftMax_1.predictor_function()
+
+
         self.Weigths =[self.conv1.Filter,
                        self.conv2.Filter,
                        self.conv3.Filter,
@@ -281,6 +286,8 @@ class CNNGCresc(object):
                        self.conv10.Filter,
                        self.FC_1.Filter,
                        self.FC_1.Bias ]
+
+
 
     def GetWeightsValues(self):
         WeightNPValues =  {
@@ -298,46 +305,3 @@ class CNNGCresc(object):
             "FC1BiasValues": self.FC_1.GetNPBiasValue()
         }
         return WeightNPValues
-    """  
-            FC2Values = initWeights['FC2Values']
-            FC2_BiasInitial_bias_values = initWeights['FC2BiasValues']
-            self.FC_2 = fc_layer.FCLayer(
-                input_image=self.DO_1.output,
-                initial_filter_values=FC2Values,
-                initial_bias_values=FC2_BiasInitial_bias_values,
-                layer_name="FcLayer_2"
-            )
-            self.FC_relu_2 = utils.Relu(self.FC_2.ProductoCruz)
-    
-            self.DO_2 = dropout_layer.DropOutLayer(self.FC_relu_2, srng, (batch_size, layers_metaData['DO2_size_in']), isTraining, pDropOut)
-    
-            SoftMaxValues = initWeights['SoftMax1Values']
-            SoftMaxBiasInitial_bias_values = initWeights['SoftMax1BiasValues']
-            self.SoftMax_1 = softmax_layer.SoftMaxLayer(
-                input_image=self.DO_2.output,
-                initial_filter_values=SoftMaxValues,
-                initial_bias_values=SoftMaxBiasInitial_bias_values,
-                layer_name="SoftMax_1"
-            )
-            """
-
-
-
-    def negative_log_likelihood(self):
-        """
-        Esta funcion es nuestro criterio de medida de que tan bien ha realizado el calculo la CNN,
-        Checamos la probabilidad predecida para Y, despues sumamos todas las probabilidades y les sacamos el promedio de que tanto se equivoca
-        Cost Function with mean and not sum
-        :param y: es una coleccion de indices donde cada row representa un ejemplo y su valor el indice correcto
-        :return:
-        """
-        listaindices = T.arange(self.y.shape[0])  # creamos una secuencia de 0 hasta el numero de de elementos en y
-
-        resultLog = T.log(
-            self.p_y_given_x)  # aplicamos la funcion log a las probabilidades predecidas por cada una de las posibles clases, Siempre resultara un numero negativo, si la probabilidad es muy baja dara un resultado mas negativo
-        result = resultLog[
-            listaindices, self.y]  # por cada row(ejemplo predecido) obtenemos la probabilidad de la clase correcta(y), si es correcta debe ser muy alta y si es incorrecta debe ser muy baja
-
-        return T.mean(
-            result)  # Regresamos el promedio de las respuestas calculadas, si es muy alto significa que va bien por lo que queremos Maximizar el resultado
-

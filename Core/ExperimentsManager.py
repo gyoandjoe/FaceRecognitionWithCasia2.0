@@ -12,11 +12,11 @@ class ExperimentsManager(object):
         self.experimentRepo = None
         return
 
-    def CreateExperiment(self, initialLearningRate, PKLsTrainReferenceFile, PKLsTestReferenceFile, status, batchSize, superBatchSize, maxEpochTraining, FolderWeightsPath,epochFrecSaveWeights = 10, withLRDecay = 0, EpochFrecLRDecay=0, BatchActual=0, ShouldDecreaseNow=0, ShouldIncreaseNow=0):
+    def CreateExperiment(self, initialLearningRate, PKLsTrainReferenceFile, PKLsTestReferenceFile,PKLsValReferenceFile, status, batchSize, superBatchSize, maxEpochTraining, FolderWeightsPath,epochFrecSaveWeights = 10, withLRDecay = 0, EpochFrecLRDecay=0, BatchActual=0, ShouldDecreaseNow=0, ShouldIncreaseNow=0):
         conn = sqlite3.connect(self.dataBaseFile)
         c = conn.cursor()
 
-        query="INSERT INTO Experiments VALUES (NULL ,"+str(initialLearningRate) + ",'" + str(PKLsTrainReferenceFile) + "','" + str(PKLsTestReferenceFile) + "','" + str(status) + "'," + str(batchSize) + "," + str(superBatchSize) + "," + str(maxEpochTraining) + "," + str(epochFrecSaveWeights) + "," + str(withLRDecay) + "," + str(EpochFrecLRDecay) + "," + str(BatchActual) + "," + str(ShouldDecreaseNow) + "," + str(ShouldIncreaseNow) + ",'"+str(FolderWeightsPath)+"')"
+        query="INSERT INTO Experiments VALUES (NULL ,"+str(initialLearningRate) + ",'" + str(PKLsTrainReferenceFile) + "','" + str(PKLsTestReferenceFile) + "','" + str(status) + "'," + str(batchSize) + "," + str(superBatchSize) + "," + str(maxEpochTraining) + "," + str(epochFrecSaveWeights) + "," + str(withLRDecay) + "," + str(EpochFrecLRDecay) + "," + str(BatchActual) + "," + str(ShouldDecreaseNow) + "," + str(ShouldIncreaseNow) + ",'"+str(FolderWeightsPath)+"','" + str(PKLsValReferenceFile) + "')"
         print (query)
         c.execute(query)
         newId = c.lastrowid
@@ -50,6 +50,13 @@ class ExperimentsManager(object):
         self.experiment = ExperimentDomain.ExperimentDomain(
             pkl_train_referenceFullpath=self.experimentRepo.ObtenerPKLsTrainReferenceFile(),
             pkl_test_referenceFullpath=self.experimentRepo.ObtenerPKLsTestReferenceFile(),
+            pkl_validation_referenceFullpath=self.experimentRepo.ObtenerPKLsValidationReferenceFile(),
+
+            pkl_train_referenceList=self.experimentRepo.ObtenerPKLTranRerferenceList(),
+            pkl_test_referenceList=self.experimentRepo.ObtenerPKLTestRerferenceList(),
+            pkl_validation_referenceList=self.experimentRepo.ObtenerPKLValidationReferenceList(),
+
+
             max_epochs=self.experimentRepo.ObtenerMaxEpoch(),
             with_lr_decay=self.experimentRepo.ObtenerWithLRDecay(),
             learning_rate_ratio_decay=0.1,
@@ -58,8 +65,9 @@ class ExperimentsManager(object):
             frecuency_lr_decay=self.experimentRepo.ObtenerFrecuencyLRDecay(),
             batch_size=self.experimentRepo.ObtenerBatchSize(),
             super_batch_size=self.experimentRepo.ObtenerSuperBatchSize(),
-            pkl_train_referenceList=self.experimentRepo.ObtenerPKLTranRerferenceList(),
-            folderWeightsPath=self.experimentRepo.ObtenerFolderWeightsPath()
+
+            folderWeightsPath=self.experimentRepo.ObtenerFolderWeightsPath(),
+
         )
 
         return self.experiment
