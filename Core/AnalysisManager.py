@@ -20,7 +20,7 @@ from Core.WeightsManager import WeightsManager
 from IGenericServices.ExperimentsRepo import ExperimentsRepo
 from IGenericServices.LoggerRepo import LoggerRepo
 from IGenericServices.WeightsRepo import WeigthsRepo
-
+import csv
 
 class AnalysisManager(object):
     def __init__(self, data_base, analisys_repo,id_experiment, ):
@@ -126,7 +126,7 @@ class AnalysisManager(object):
                 break
         print("End Test :)")
 
-    def BuildWeigthsErrorAndCost_ValSet(self,noRows_valset,skipuntilidw,justOne):
+    def BuildWeigthsErrorAndCost_ValSet(self,noRows_valset,skipuntilidw,justOne,pdropout):
         # Calculo total del costo y error por todos los datos, pero por cada conjunto de pesos generados
         #experiment_repo = Experiments.ExperimentsRepo.ExperimentsRepo(bd, id_experiment)
         #weigths_repo = WeigthsRepo.WeigthsRepo(bd, weigths_path)
@@ -163,7 +163,7 @@ class AnalysisManager(object):
                 srng=rng_droput,
                 no_channels_imageInput=1,
                 isTraining=0,
-                pDropOut=0.7  # antes 0.60
+                pDropOut=pdropout  # antes 0.60
             )
 
             # exp 9 pDropout=0.65
@@ -394,3 +394,87 @@ class AnalysisManager(object):
         plt.title('Error Curve id experiment(' + str(id_experiment)+')')
         plt.show()
         return
+
+
+
+
+
+
+
+
+    def BuildResults_ValSet(self,noRows_valset,skipuntilidw,justOne):
+        # Calculo total del costo y error por todos los datos, pero por cada conjunto de pesos generados
+        #experiment_repo = Experiments.ExperimentsRepo.ExperimentsRepo(bd, id_experiment)
+        #weigths_repo = WeigthsRepo.WeigthsRepo(bd, weigths_path)
+        database_relative_path = self.data_base
+        id_experiment = self.id_experiment
+        wr = WeigthsRepo(database_name=database_relative_path, id_experiment=id_experiment)
+        wm = WeightsManager(
+            database_name=database_relative_path,
+            weights_repo=wr
+        )
+
+        weigthsOfExperiment = wm.GetListOfWeightsByIdExperiment(id_experiment)
+
+
+        print('--------------------------- Validation SET -------------------------------------------------')
+
+        print("Calculando Errores en validationSet y costos en validation set")
+        csvfile = open(r'D:\Gyo\Dev\Thesis\dist2\analisys\DataSet_analisys_resultts.csv', 'w', newline='')
+        csvwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
+
+        for w in weigthsOfExperiment:
+            idW = w[0]
+            if idW < skipuntilidw:
+                continue
+            # Ahora cargamos los weights
+
+            iws = wm.LoadWeightsXId(idW)
+            random_droput = np.random.RandomState(12345)
+            rng_droput = T.shared_randomstreams.RandomStreams(random_droput.randint(999899))
+
+            # terminar de instanciar esto
+            cnn = CNNGCresc(
+                layers_metaData=layers_metaData,
+                initWeights=iws,
+                srng=rng_droput,
+                no_channels_imageInput=1,
+                isTraining=0,
+                pDropOut=0.7  # antes 0.60
+            )
+
+            # exp 9 pDropout=0.65
+            logger = LoggerRepo(id_experiment=id_experiment, database_name=database_relative_path)
+            experimentsManager = ExperimentsManager(database_relative_path)
+
+            self.experiment = experimentsManager.LoadExpermentById(self.id_experiment)
+
+            self.data_set_repo = DataSetRepo(
+                list_PKL_files=self.experiment.pkl_validation_referenceList,
+                batch_size=self.experiment.batch_size,
+                superbatch_Size=self.experiment.super_batch_size,
+                no_rows=noRows_valset
+            )
+            self.data_set_manager = DataSetManager(self.experiment.batch_size, self.experiment.super_batch_size,
+                                                   self.data_set_repo)
+
+
+
+            validator = Validator_ValTest(
+                data_set_manager=self.data_set_manager,
+                logger=logger,
+                cnn=cnn,
+                weightsRepo=wr,
+                removeRandom=True
+            )
+
+            result = validator.CalculateResults()
+            rrr = zip(result[0],result[1],result[2])
+            for rr in rrr:
+                csvwriter.writerow([rr[0],rr[1],rr[2]])
+            csvfile.close()
+
+            if justOne == True:
+                break
+
+        print("End Validation :)")

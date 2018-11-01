@@ -68,7 +68,8 @@ class Trainer(object):
             givens={
                 self.CNN.image_input: self.data_set_manager.dataSetX[index * noRowsInBatch: (index + 1) * noRowsInBatch],
                 self.CNN.y: self.data_set_manager.dataSetY          [index * noRowsInBatch: (index + 1) * noRowsInBatch],
-                self.CNN.batch_size:noRowsInBatch
+                self.CNN.batch_size:noRowsInBatch,
+                self.CNN.DO_1.mask: self.CNN.DO_1.UpdateMask()
             }
             #on_unused_input='warn'
         )
@@ -108,6 +109,7 @@ class Trainer(object):
                 cost = self.train_model(batch_index_in_superbatch, self.experiment.learning_rate,noRowsInBatch)
 
                 print("costo: " + str(cost) + " epoca: " + str(epoch_index) + " Batch: " + str(batch_index) +"/" + str(self.data_set_manager.Dataset_repo.No_batchs_in_dataset-1) +" Learning Rate: " + str(self.experiment.learning_rate))
+
                 self.logger.LogTrain(
                     costo=cost,
                     epoch_index= str(epoch_index),

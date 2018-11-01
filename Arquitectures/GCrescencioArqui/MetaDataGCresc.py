@@ -1,24 +1,24 @@
 weightsMetadata={
-    "folder_weights_path":"D:\Gyo\Dev\Thesis\FaceRecognition2.0\Aplication\Weights"
+    "folder_weights_path":"E:\Gyo\Dev\Thesis\FaceRecognition2.0\Aplication\Weights"
 }
 
 experimentMetaData={
     "initialLearningRate": 0.1,
-    "PKLsTrainReferenceFile": 'D:\\Gyo\\Dev\\Thesis\\dist2\\referenceTrainfull\\pkls_train.csv',
-    "PKLsTestReferenceFile": 'D:\\Gyo\\Dev\\Thesis\\dist2\\referencetest\\pkls_test.csv',
-    "PKLsValReferenceFile": 'D:\\Gyo\\Dev\\Thesis\\dist2\\referencetest\\pkls_valid.csv',
+    "PKLsTrainReferenceFile": 'E:\\Dev\\Thesis\\dist4\\pkls\\pkls_train.csv',
+    "PKLsTestReferenceFile": 'E:\\Dev\\Thesis\\dist4\\pkls\\pkls_test.csv',
+    "PKLsValReferenceFile": 'E:\\Dev\\Thesis\\dist4\\pkls\\pkls_valid.csv',
     "status": 'inicializado',
     "batchSize": 400,
     "superBatchSize": 36000,
-    "noRowsTrainSet":690838,
-    "maxEpochTraining": 60,
+    "noRowsTrainSet": 838672,
+    "maxEpochTraining": 400,
     "epochFrecSaveWeights": 1,
     "withLRDecay":0,
     "EpochFrecLRDecay":5,
     "BatchActual":0,
     "ShouldDecreaseNow":0,
     "ShouldIncreaseNow":0,
-    "folderWeightsPath":"D:\Gyo\Dev\Thesis\FaceRecognition2.0\Aplication\Weights"
+    "folderWeightsPath":"E:\Dev\Thesis\FaceRecognition2.0\Aplication\Weights"
 }
 
 

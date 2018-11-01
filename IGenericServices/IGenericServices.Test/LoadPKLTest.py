@@ -2,7 +2,7 @@ import _pickle as cPickle
 import os
 import numpy as np
 
-fLoaded = open('D:\\Gyo\\Dev\\Thesis\\dist2\\pkls\\randTrain\\CASIA_TrainSet_Rand1GB_177.pkl',mode='rb')
+fLoaded = open('E:\\Dev\\Thesis\\dist4\\pkls\\randTrain\\CASIA_TrainSet_Rand1GB_215.pkl',mode='rb')
 
 data = cPickle.load(fLoaded, encoding='latin1')
 fLoaded.close()

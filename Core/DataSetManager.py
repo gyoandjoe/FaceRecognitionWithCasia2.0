@@ -51,7 +51,7 @@ class DataSetManager(object):
         self.NoRowsInBatch = None
 
 
-    def LoadRandomOrderDataSetXBatch(self, batch_index):
+    def LoadRandomOrderDataSetXBatch(self, batch_index,removeRandom=False):
         """
         Metodo para cargar el shared dataset en memoria de gpu a partir del batch_index, si el batch solicitado ya esta cargado no se volver a acargar
         :param batch_index: es un numero que puede ser muy grande, ya que estos batches estan contenidos en los superbatches, y su numeracion atraviesa estos super batches, debe comenzar en 0 y no en 1
@@ -73,34 +73,29 @@ class DataSetManager(object):
         else:
             #Se debera cargar el batch
             self.Current_superbatch_loaded = superBatchIndexRequested
-            self.LoadRandomRawDataSetXSuperBatchIndex(self.Current_superbatch_loaded)
+            self.LoadRandomRawDataSetXSuperBatchIndex(self.Current_superbatch_loaded,removeRandom)
             print("Nueva carga de batch, No de registros: " + str(self.NoRowsInBatch))
-
-
-
 
         return (self.batch_index_in_SuperBatch,self.NoRowsInBatch)
 
 
 
-
-    def LoadRandomRawDataSetXSuperBatchIndex(self, indexSuperBatch):
+    def LoadRandomRawDataSetXSuperBatchIndex(self, indexSuperBatch,removeRandom=False):
         rawX, rawY = self.Dataset_repo.GetRawDataSetBySuperBatchIndex(indexSuperBatch)
         newShapeX = (rawX.shape[0], 1, rawX.shape[1],rawX.shape[2])
 
         newx = np.reshape(np.asarray(rawX, dtype=theano.config.floatX),(newShapeX))
         newy = np.asarray(rawY, dtype=int)
 
-        #self.theano_rng = RandomStreams(self.Seed_Random_batch_order)
-        #newOrder = self.theano_rng.permutation(n=self.Superbatch_size, size=(1,)),
+        if removeRandom==False:
+            p = np.random.permutation(int(rawX.shape[0]))
+            newy = newy[p]
+            newx = newx[p]
 
-        p = np.random.permutation(int(rawX.shape[0]))
-        newy = newy[p]
-        newx = newx[p]
         if (self.dataSetX is None or self.dataSetY is None):
             self.dataSetX = theano.shared(newx, borrow=True)
             self.dataSetY = theano.shared(newy, borrow=True)
         else:
             self.dataSetX.set_value(newx,borrow=True)
             self.dataSetY.set_value(newy,borrow=True)
-        return p.shape[0]
+        return rawX.shape[0]

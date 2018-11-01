@@ -16,22 +16,21 @@ from Core.WeightsManager import WeightsManager
 from IGenericServices.ExperimentsRepo import ExperimentsRepo
 from IGenericServices.LoggerRepo import LoggerRepo
 from IGenericServices.WeightsRepo import WeigthsRepo
-
+import csv
 database_relative_path = "../BD/FR2.0.db"
-
-
-
 
 
 am = AnalysisManager(data_base=database_relative_path,
                      analisys_repo=None,
-                     id_experiment=24)
+                     id_experiment=40)
 
-am.BuildWeigthsErrorAndCost_ValSet(146900,645,True)
+am.BuildWeigthsErrorAndCost_ValSet(148000,1602,True,0.4) #antes 146900
 
-am.BuildWeigthsErrorAndCost_TestSet(146900,645,True)
+#am.BuildWeigthsErrorAndCost_TestSet(148001,1307,True) #antes 146900
 
-am.BuildWeigthsErrorAndCost_TrainSet(690838,645,True)
+#am.BuildResults_ValSet(148000,1559,True)
+
+#am.BuildWeigthsErrorAndCost_TrainSet(690671,1053,True)
 
 print ("OK")
 """

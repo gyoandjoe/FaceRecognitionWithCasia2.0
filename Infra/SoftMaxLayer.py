@@ -18,6 +18,7 @@ class SoftMaxLayer(object):
 
         self.LayerName = 'SoftMaxLayer_' + layer_name
 
+        #Retorna las probabilidades para cada una de las clases
         self.p_y_given_x = T.nnet.softmax(input_image)
 
         self.y_pred = T.argmax(self.p_y_given_x, axis=1)
@@ -33,10 +34,11 @@ class SoftMaxLayer(object):
         """
         listaindices = T.arange(y.shape[0])  # creamos una secuencia de 0 hasta el numero de de elementos en y
 
-        resultLog = T.log(
-            self.p_y_given_x)  # aplicamos la funcion log a las probabilidades predecidas por cada una de las posibles clases, Siempre resultara un numero negativo, si la probabilidad es muy baja dara un resultado mas negativo
-        result = resultLog[
-            listaindices, y]  # por cada row(ejemplo predecido) obtenemos la probabilidad de la clase correcta(y), si es correcta debe ser muy alta y si es incorrecta debe ser muy baja
+        # aplicamos la funcion log a las probabilidades predecidas por cada una de las posibles clases, Siempre resultara un numero negativo, si la probabilidad es muy baja dara un resultado mas negativo
+        resultLog = T.log(self.p_y_given_x)
+
+        # por cada row(ejemplo predecido) obtenemos la probabilidad predecida de la clase correcta(y), si acertamos debe ser muy alta y si es incorrecta debe ser muy baja
+        result = resultLog[listaindices, y]
 
         return T.mean(
             result)  # Regresamos el promedio de las respuestas calculadas, si es muy alto significa que va bien por lo que queremos Maximizar el resultado
@@ -58,3 +60,9 @@ class SoftMaxLayer(object):
 
     def predictor_function(self):
         return self.y_pred
+
+    def resolts_prediction(self, y):
+
+        result = T.neq(self.y_pred, y)  # the T.neq operator returns a vector of 0s and 1s, where 1 represents a mistake in prediction
+
+        return (result,self.y_pred,y)

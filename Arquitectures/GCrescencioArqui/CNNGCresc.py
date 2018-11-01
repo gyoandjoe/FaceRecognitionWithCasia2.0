@@ -271,6 +271,8 @@ class CNNGCresc(object):
 
         self.ErrorFunction = self.SoftMax_1.error_function(self.y)
 
+        self.ResultsFunction = self.SoftMax_1.resolts_prediction(self.y)
+
         self.PredictorFunction = self.SoftMax_1.predictor_function()
 
 

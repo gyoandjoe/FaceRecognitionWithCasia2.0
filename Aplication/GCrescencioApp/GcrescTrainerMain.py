@@ -19,8 +19,8 @@ from IGenericServices.WeightsRepo import WeigthsRepo
 database_relative_path = "../BD/FR2.0.db"
 
 
-idExperiment =25
-idW=704
+idExperiment =40
+idW=1604
 
 #Creamos experimiento con ids en caso de que no exista uno asignado, esto es cuadno idExperiment == -1
 if (idExperiment == -1):
@@ -38,24 +38,26 @@ wm = WeightsManager(
 )
 
 iws = wm.LoadWeightsXId(idW)
-random_droput = np.random.RandomState(12545)
+random_droput = np.random.RandomState()
 rng_droput = T.shared_randomstreams.RandomStreams(random_droput.randint(999899))
 
 #terminar de instanciar esto
 cnn = CNNGCresc(
     #batch_size=507,
     layers_metaData=layers_metaData,
-    initWeights=iws,
+    initWeights=iws,    
     srng = rng_droput,
     no_channels_imageInput=1,
     isTraining=1,
-    pDropOut=0.4#0.7 con experiment 24 #antes 0.60
+    pDropOut=0.4#Entre mas bajo mas penalizador.  Epoca 38 con 0.75, epoca 40 con 0.4                             #0.7 con experiment 24 #antes 0.60
 )
 
 #exp 9 pDropout=0.65
 logger = LoggerRepo(id_experiment=idExperiment,database_name=database_relative_path)
 expRepo=ExperimentsManager(database_relative_path)
 noRowsTrainSet = experimentMetaData["noRowsTrainSet"]
+
+
 
 trainer = Trainer(
     idExperiment=idExperiment,
@@ -65,7 +67,7 @@ trainer = Trainer(
     weightsRepo=wr,
     norows_trainset=noRowsTrainSet
 )
-trainer.Train(current_batch=0,current_epoch=59)
+trainer.Train(current_batch=0,current_epoch=43)
 
 
-print ("OK")
+print("OK")
